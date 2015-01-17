@@ -1,25 +1,66 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
+
+using PinboardLinkBlogger.Model;
+
 
 namespace PinboardLinkBlogger
 {
     public partial class MainForm : Form
     {
         List<PostItem> _postItems = new List<PostItem>(); 
-        List<Section> _sections = new List<Section>(); 
+        List<Section> _sections = new List<Section>();
+        private string _templateFile = "DefaultTemplate.json";
+        private string _settingsPath = AppDomain.CurrentDomain.BaseDirectory;
+        private Template _settingsTemplate = new Template();
 
-        
+        public Template SettingsTemplate
+        {
+            get { return _settingsTemplate; }
+            set { _settingsTemplate = value; }
+        }
+
+
+        public string TemplateFile
+        {
+            get { return _templateFile; }
+            set { _templateFile = value; }
+        }
+
+
+        public string FullTemplatePath
+        {
+            get { return Path.Combine(SettingsPath, TemplateFile); }
+        }
+
+        public string SettingsPath
+        {
+            get { return _settingsPath; }
+            set { _settingsPath = value; }
+        }
+
 
         public MainForm()
         {
             InitializeComponent();
+
+            if (File.Exists(FullTemplatePath))
+            {
+                // load the file
+                var templateJson = System.IO.File.ReadAllText(FullTemplatePath);
+                SettingsTemplate = (Template) new JavaScriptSerializer().Deserialize(templateJson, typeof (Template));
+
+            }
         }
 
         private void btnGet_Click(object sender, EventArgs e)
@@ -122,6 +163,31 @@ namespace PinboardLinkBlogger
 
 
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Template t = new Template();
+            t.PostHeader = txtTemplateHeading.Text;
+            t.PostFooter = txtTemplateFooter.Text;
+            t.SectionHeader = txtTemplateSectionHeader.Text;
+            t.SectionFooter = txtTemplateSectionFooter.Text;
+            t.PostItem = txtTemplatePostItem.Text;
+            t.SectionTagMap = new Dictionary<string, List<string>>();
+            t.SectionTagMap.Add("Business", new List<string>() { "business", "xamarin" });
+            t.SectionTagMap.Add("Forms", new List<string>() { "xamarin", "forms", "xamarin.forms" });
+
+            var json = new JavaScriptSerializer().Serialize(t);
+            Console.WriteLine(json);
+
+            System.IO.File.WriteAllText(FullTemplatePath, json);
+
+            //Template x = (Template) new JavaScriptSerializer().Deserialize(json, typeof (Template));
+
+            //Console.WriteLine(x.SectionTagMap.ToString());
+
+            //System.IO.File.WriteAllText();
+            //System.IO.File.Read
         }
     }
 }
