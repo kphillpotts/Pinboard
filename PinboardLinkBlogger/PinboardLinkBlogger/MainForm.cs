@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
-
+using System.Windows.Forms.VisualStyles;
 using PinboardLinkBlogger.Model;
 
 
@@ -59,8 +59,32 @@ namespace PinboardLinkBlogger
                 // load the file
                 var templateJson = System.IO.File.ReadAllText(FullTemplatePath);
                 SettingsTemplate = (Template) new JavaScriptSerializer().Deserialize(templateJson, typeof (Template));
+                PopulateTemplate();
 
             }
+        }
+
+        private void PopulateTemplate()
+        {
+            txtTemplateHeading.Text = SettingsTemplate.PostHeader;
+            txtTemplateFooter.Text = SettingsTemplate.PostFooter;
+            txtTemplateSectionHeader.Text = SettingsTemplate.SectionHeader;
+            txtTemplateSectionFooter.Text = SettingsTemplate.SectionFooter;
+            txtTemplatePostItem.Text = SettingsTemplate.PostItem;
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var key in SettingsTemplate.SectionTagMap.Keys)
+            {
+                var tagValues = string.Join(" ", SettingsTemplate.SectionTagMap[key]);
+                sb.AppendLine(string.Format("{0}={1}", key, tagValues));
+            }
+
+            txtTemplateSectionDefinitons.Text = sb.ToString();
+
+            //t.SectionTagMap = new Dictionary<string, List<string>>();
+            //t.SectionTagMap.Add("Business", new List<string>() { "business", "xamarin" });
+            //t.SectionTagMap.Add("Forms", new List<string>() { "xamarin", "forms", "xamarin.forms" });
+
         }
 
         private void btnGet_Click(object sender, EventArgs e)
@@ -85,11 +109,19 @@ namespace PinboardLinkBlogger
             foreach (var daypost in posts)
             {
 
-                PostItem newitem = new PostItem();
-                newitem.PinboardPost = daypost;
-                newitem.IncludeInOutput = false;
+                PostItem ni = new PostItem();
+                ni.Url = daypost.Href;
+                ni.Title = daypost.Description;
+                ni.Description = daypost.Extended;
+                ni.Source = "Pinboard";
+                ni.TagsString = daypost.Tag;
+                
+                ni.PostDateTime = DateTime.MinValue;
+                DateTime postDateTime = ni.PostDateTime;
+                if (DateTime.TryParse(daypost.Time, out postDateTime))
+                    ni.PostDateTime = postDateTime;
 
-                _postItems.Add(newitem);
+                _postItems.Add(ni);
 
                 //System.Diagnostics.Debug.WriteLine(string.Format("{0} {1}", daypost.Description, daypost.Href.ToString()));
             }
@@ -103,9 +135,12 @@ namespace PinboardLinkBlogger
             foreach (var postItem in _postItems)
             {
                 ListViewItem item = new ListViewItem();                                 
-                item.Text = postItem.PinboardPost.Description;
-                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.PinboardPost.Href));
-                item.Checked = postItem.IncludeInOutput;
+                item.Text = postItem.Title;
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.Url));
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.Description));
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.TagsString));
+                //item.Checked = postItem.IncludeInOutput;
+                item.Tag = postItem;
                 lvPosts.Items.Add(item);
             }
 
@@ -134,15 +169,18 @@ namespace PinboardLinkBlogger
             // get the title of the item
             var itemTitle = item.Text;
 
-            var post = _postItems.FirstOrDefault(i => i.PinboardPost.Description == itemTitle);
+            var post = _postItems.FirstOrDefault(i => i.Title == itemTitle);
 
             if (post == null)
                 return;
 
-            txtTitle.Text = post.PinboardPost.Description;
-            txtDescription.Text = post.PinboardPost.Extended;
-            txtUrl.Text = post.PinboardPost.Href;
-            txtTags.Text = post.PinboardPost.Tag;
+            txtTitle.Text = post.Title;
+            txtDescription.Text = post.Description;
+            txtUrl.Text = post.Url;
+            txtTags.Text = post.TagsString;
+
+            webBrowser1.Navigate(post.Url);
+
         }
 
         private void btnSectionAdd_Click(object sender, EventArgs e)
@@ -173,9 +211,25 @@ namespace PinboardLinkBlogger
             t.SectionHeader = txtTemplateSectionHeader.Text;
             t.SectionFooter = txtTemplateSectionFooter.Text;
             t.PostItem = txtTemplatePostItem.Text;
-            t.SectionTagMap = new Dictionary<string, List<string>>();
-            t.SectionTagMap.Add("Business", new List<string>() { "business", "xamarin" });
-            t.SectionTagMap.Add("Forms", new List<string>() { "xamarin", "forms", "xamarin.forms" });
+
+            var sectionText = txtTemplateSectionDefinitons.Text;
+            string[] lines = sectionText.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (var line in lines)
+            {
+                var pos1 = line.IndexOf("=", System.StringComparison.Ordinal);
+                var sectionName = line.Substring(0, pos1);
+
+                var tagNames = line.Substring(pos1 + 1);
+
+                var tags = tagNames.Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+
+                if (!t.SectionTagMap.ContainsKey(sectionName))
+                {
+                    t.SectionTagMap.Add(sectionName, new List<string>());
+                }
+
+                t.SectionTagMap[sectionName].AddRange(tags);
+            }
 
             var json = new JavaScriptSerializer().Serialize(t);
             Console.WriteLine(json);
@@ -189,5 +243,64 @@ namespace PinboardLinkBlogger
             //System.IO.File.WriteAllText();
             //System.IO.File.Read
         }
+
+        private void btnPublish_Click(object sender, EventArgs e)
+        {
+            List<PostItem> selectedItems = new List<PostItem>();
+
+            foreach (var selectedItem in lvPosts.CheckedItems)
+            {
+                ListViewItem lv = selectedItem as ListViewItem;
+
+                if (lv == null) continue;
+
+                if (lv.Tag is PostItem)
+                {
+                    selectedItems.Add((PostItem)lv.Tag);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(TokenReplacement(SettingsTemplate.PostHeader));
+
+            foreach (var selectedItem in selectedItems)
+            {
+                sb.AppendLine(PostTokenReplacement(SettingsTemplate.PostItem, selectedItem));
+            }
+
+            sb.AppendLine(TokenReplacement(SettingsTemplate.PostFooter));
+
+            txtPreview.Text = sb.ToString();
+
+
+        }
+
+        private string TokenReplacement(string inputString)
+        {
+            inputString = inputString.Replace("%%DATE%%", DateTime.Now.ToShortDateString());
+            return inputString;
+
+        }
+
+
+        private string PostTokenReplacement(string inputString, PostItem itemValues)
+        {
+            inputString = inputString.Replace("%%DATE%%", DateTime.Now.ToShortDateString());
+
+            inputString = inputString.Replace("%%URL%%", itemValues.Url);
+            inputString = inputString.Replace("%%TITLE%%", itemValues.Title);
+            inputString = inputString.Replace("%%AUTHOR%%", itemValues.Author);
+            inputString = inputString.Replace("%%DESCRIPTION%%", itemValues.Description);
+
+            inputString = inputString.Replace("%%SECTION%%", itemValues.Section);
+            return inputString;
+
+
+
+
+        }
+
+
     }
 }

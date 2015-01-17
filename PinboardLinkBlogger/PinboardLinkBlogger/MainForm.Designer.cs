@@ -76,6 +76,12 @@
             this.txtTemplateHeading = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtTemplateSectionDefinitons = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnPublish = new System.Windows.Forms.Button();
+            this.txtPreview = new System.Windows.Forms.TextBox();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -93,6 +99,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -103,6 +110,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnPublish);
             this.splitContainer1.Panel1.Controls.Add(this.btnSectionRemove);
             this.splitContainer1.Panel1.Controls.Add(this.btnSectionAdd);
             this.splitContainer1.Panel1.Controls.Add(this.label9);
@@ -123,8 +131,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10);
-            this.splitContainer1.Size = new System.Drawing.Size(976, 530);
-            this.splitContainer1.SplitterDistance = 324;
+            this.splitContainer1.Size = new System.Drawing.Size(1049, 671);
+            this.splitContainer1.SplitterDistance = 348;
             this.splitContainer1.TabIndex = 0;
             // 
             // btnSectionRemove
@@ -217,7 +225,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGet.Location = new System.Drawing.Point(75, 64);
             this.btnGet.Name = "btnGet";
-            this.btnGet.Size = new System.Drawing.Size(235, 23);
+            this.btnGet.Size = new System.Drawing.Size(259, 23);
             this.btnGet.TabIndex = 4;
             this.btnGet.Text = "Get";
             this.btnGet.UseVisualStyleBackColor = true;
@@ -230,7 +238,7 @@
             this.txtPassword.Location = new System.Drawing.Point(75, 38);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(235, 20);
+            this.txtPassword.Size = new System.Drawing.Size(259, 20);
             this.txtPassword.TabIndex = 3;
             // 
             // lblPassword
@@ -248,7 +256,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.Location = new System.Drawing.Point(75, 12);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(235, 20);
+            this.txtUserName.Size = new System.Drawing.Size(259, 20);
             this.txtUserName.TabIndex = 1;
             // 
             // lblUserName
@@ -269,7 +277,7 @@
             this.tabControl1.Location = new System.Drawing.Point(10, 10);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(628, 510);
+            this.tabControl1.Size = new System.Drawing.Size(677, 651);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -278,7 +286,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(620, 484);
+            this.tabPage1.Size = new System.Drawing.Size(669, 625);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Posts";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -297,8 +305,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
-            this.splitContainer2.Size = new System.Drawing.Size(614, 478);
-            this.splitContainer2.SplitterDistance = 239;
+            this.splitContainer2.Size = new System.Drawing.Size(663, 619);
+            this.splitContainer2.SplitterDistance = 309;
             this.splitContainer2.TabIndex = 1;
             // 
             // lvPosts
@@ -312,7 +320,7 @@
             this.lvPosts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPosts.Location = new System.Drawing.Point(0, 0);
             this.lvPosts.Name = "lvPosts";
-            this.lvPosts.Size = new System.Drawing.Size(614, 239);
+            this.lvPosts.Size = new System.Drawing.Size(663, 309);
             this.lvPosts.TabIndex = 0;
             this.lvPosts.UseCompatibleStateImageBehavior = false;
             this.lvPosts.View = System.Windows.Forms.View.Details;
@@ -338,6 +346,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.webBrowser1);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.cboSection);
             this.panel1.Controls.Add(this.txtTags);
@@ -351,7 +360,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(614, 235);
+            this.panel1.Size = new System.Drawing.Size(663, 306);
             this.panel1.TabIndex = 0;
             // 
             // label5
@@ -371,7 +380,7 @@
             this.cboSection.FormattingEnabled = true;
             this.cboSection.Location = new System.Drawing.Point(84, 141);
             this.cboSection.Name = "cboSection";
-            this.cboSection.Size = new System.Drawing.Size(513, 21);
+            this.cboSection.Size = new System.Drawing.Size(562, 21);
             this.cboSection.TabIndex = 8;
             // 
             // txtTags
@@ -380,7 +389,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTags.Location = new System.Drawing.Point(84, 114);
             this.txtTags.Name = "txtTags";
-            this.txtTags.Size = new System.Drawing.Size(514, 20);
+            this.txtTags.Size = new System.Drawing.Size(563, 20);
             this.txtTags.TabIndex = 7;
             // 
             // label4
@@ -399,7 +408,7 @@
             this.txtDescription.Location = new System.Drawing.Point(83, 61);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(514, 47);
+            this.txtDescription.Size = new System.Drawing.Size(563, 47);
             this.txtDescription.TabIndex = 5;
             // 
             // label3
@@ -417,7 +426,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUrl.Location = new System.Drawing.Point(83, 35);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(514, 20);
+            this.txtUrl.Size = new System.Drawing.Size(563, 20);
             this.txtUrl.TabIndex = 3;
             // 
             // label2
@@ -435,7 +444,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTitle.Location = new System.Drawing.Point(84, 9);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(514, 20);
+            this.txtTitle.Size = new System.Drawing.Size(563, 20);
             this.txtTitle.TabIndex = 1;
             // 
             // label1
@@ -450,6 +459,9 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.txtTemplateSectionDefinitons);
+            this.tabPage2.Controls.Add(this.label10);
             this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.groupBox5);
             this.tabPage2.Controls.Add(this.groupBox4);
@@ -565,6 +577,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.txtPreview);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(620, 484);
@@ -583,11 +596,70 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(13, 287);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(43, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Section";
+            // 
+            // txtTemplateSectionDefinitons
+            // 
+            this.txtTemplateSectionDefinitons.Location = new System.Drawing.Point(62, 287);
+            this.txtTemplateSectionDefinitons.Multiline = true;
+            this.txtTemplateSectionDefinitons.Name = "txtTemplateSectionDefinitons";
+            this.txtTemplateSectionDefinitons.Size = new System.Drawing.Size(545, 94);
+            this.txtTemplateSectionDefinitons.TabIndex = 16;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(59, 384);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(227, 13);
+            this.label11.TabIndex = 17;
+            this.label11.Text = "Format per line: Section_Name=tag1 tag2 tagn";
+            // 
+            // btnPublish
+            // 
+            this.btnPublish.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPublish.Location = new System.Drawing.Point(75, 93);
+            this.btnPublish.Name = "btnPublish";
+            this.btnPublish.Size = new System.Drawing.Size(259, 23);
+            this.btnPublish.TabIndex = 15;
+            this.btnPublish.Text = "Publish";
+            this.btnPublish.UseVisualStyleBackColor = true;
+            this.btnPublish.Click += new System.EventHandler(this.btnPublish_Click);
+            // 
+            // txtPreview
+            // 
+            this.txtPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPreview.Location = new System.Drawing.Point(0, 0);
+            this.txtPreview.Multiline = true;
+            this.txtPreview.Name = "txtPreview";
+            this.txtPreview.Size = new System.Drawing.Size(620, 484);
+            this.txtPreview.TabIndex = 17;
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.webBrowser1.Location = new System.Drawing.Point(83, 168);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.ScriptErrorsSuppressed = true;
+            this.webBrowser1.Size = new System.Drawing.Size(563, 135);
+            this.webBrowser1.TabIndex = 10;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 530);
+            this.ClientSize = new System.Drawing.Size(1049, 671);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MainForm";
             this.Text = "MainForm";
@@ -605,6 +677,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -615,6 +688,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -669,5 +744,11 @@
         private System.Windows.Forms.TextBox txtTemplateFooter;
         private System.Windows.Forms.TextBox txtTemplateHeading;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtTemplateSectionDefinitons;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnPublish;
+        private System.Windows.Forms.TextBox txtPreview;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
