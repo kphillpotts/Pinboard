@@ -136,6 +136,7 @@ namespace PinboardLinkBlogger
             {
                 ListViewItem item = new ListViewItem();                                 
                 item.Text = postItem.Title;
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.PostDateTime.ToShortDateString()));
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.Url));
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.Description));
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, postItem.TagsString));
