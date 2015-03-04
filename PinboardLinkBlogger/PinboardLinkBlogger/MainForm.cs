@@ -218,6 +218,7 @@ namespace PinboardLinkBlogger
             foreach (var line in lines)
             {
                 var pos1 = line.IndexOf("=", System.StringComparison.Ordinal);
+                if (pos1 < 0) continue;
                 var sectionName = line.Substring(0, pos1);
 
                 var tagNames = line.Substring(pos1 + 1);
@@ -265,9 +266,26 @@ namespace PinboardLinkBlogger
 
             sb.AppendLine(TokenReplacement(SettingsTemplate.PostHeader));
 
+            Dictionary<string, List<string>> groupListings = new Dictionary<string, List<string>>();
+
             foreach (var selectedItem in selectedItems)
             {
-                sb.AppendLine(PostTokenReplacement(SettingsTemplate.PostItem, selectedItem));
+                var group = FindGroupForTagList(selectedItem.TagsList);
+                var item = PostTokenReplacement(SettingsTemplate.PostItem, selectedItem);
+                if (!groupListings.ContainsKey(group))
+                    groupListings.Add(group, new List<string>());
+                groupListings[group].Add(item);
+            }
+
+            foreach (var item in groupListings)
+            {
+                string head = GetHeader(item.Key);
+                sb.AppendLine(head);
+                foreach (var postEntry in item.Value)
+                {
+                    sb.AppendLine(postEntry);
+                }
+                sb.AppendLine(SettingsTemplate.SectionFooter);
             }
 
             sb.AppendLine(TokenReplacement(SettingsTemplate.PostFooter));
@@ -275,6 +293,34 @@ namespace PinboardLinkBlogger
             txtPreview.Text = sb.ToString();
 
 
+        }
+
+        private string GetHeader(string heading)
+        {
+            return SettingsTemplate.SectionHeader.Replace("%%SECTION%%", heading);
+        }
+
+        private string FindGroupForTagList(List<string> list)
+        {
+            foreach (var item in SettingsTemplate.SectionTagMap)
+            {
+                foreach (var itemTag in list)
+                {
+                    foreach (var sectionTag in item.Value)
+                    {
+                        if (itemTag.ToLower() == sectionTag.ToLower())
+                            return item.Key;
+                    }
+                }
+
+
+                //foreach (var sectionTag in item.Value)
+                //{
+                //    if (list.Contains(sectionTag.ToLower()))
+                //        return item.Key;
+                //}
+            }
+            return "Other";
         }
 
         private string TokenReplacement(string inputString)
