@@ -102,7 +102,7 @@ namespace PinboardLinkBlogger
             // List<Delicious.Post> posts = Delicious.Post.Get();
 
 
-            List<Pinboard.Post> posts = Pinboard.Post.Get();
+            List<Pinboard.Post> posts = Pinboard.Post.GetRecentPosts(null, 50);
 
             _postItems.Clear();
 
