@@ -54,10 +54,23 @@ namespace PinboardLinkBlogger.Model
       }
       else
       {
-        
+        SetDefaultValues();
       }
-
     }
+
+      private void SetDefaultValues()
+      {
+        this.UserName = "";
+        this.Password = "";
+        this.SectionHeader = @"<h2>%%SECTION%%</h2><ul>";
+        this.SectionFooter = @"</ul>";
+        this.PostHeader = "";
+        this.PostFooter = "";
+        this.PostItem = @"  <li><a href='%% URL %%' target='_blank'>%%TITLE%%</a>%%DESCRIPTION%%</li>";
+        this.SectionTagMap = new Dictionary<string, List<string>>();
+        
+
+      }
 
       public void SaveTemplate()
       {
